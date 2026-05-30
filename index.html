@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S!YØ — Секретное приглашение ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Comfortaa', sans-serif;
+            background: radial-gradient(circle at center, #2c1a30 0%, #120717 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Анимация лепестков сакуры */
+        .sakura-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
+
+        .petal {
+            position: absolute;
+            background: #ffb7c5;
+            border-radius: 150% 0 150% 150%;
+            opacity: 0.7;
+            animation: fadeOut linear infinite;
+        }
+
+        @keyframes fadeOut {
+            0% { transform: translate(0, -10px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.4; }
+            100% { transform: translate(100px, 110vh) rotate(400deg); opacity: 0; }
+        }
+
+        /* Стеклянная карточка с неоном */
+        .card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 0 40px rgba(255, 74, 117, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            text-align: center;
+            width: 380px;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Инфо-плашка сверху */
+        .user-badge {
+            background: rgba(255, 74, 117, 0.15);
+            border: 1px solid #ff4a75;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            color: #ff85a1;
+            display: inline-block;
+            margin: 0 auto 20px auto;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(255, 74, 117, 0.3);
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+        .gif {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+            font-size: 20px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        h3 {
+            color: #bbb;
+            font-size: 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            font-size: 15px;
+            font-weight: bold;
+            font-family: inherit;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #ff4a75, #ff7eb3);
+            color: white;
+            box-shadow: 0 5px 20px rgba(255, 74, 117, 0.4);
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 74, 117, 0.6);
+        }
+
+        .no-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: #eee;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        input[type="date"] {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #ff4a75;
+            padding: 12px;
+            border-radius: 15px;
+            color: white;
+            font-family: inherit;
+            width: 100%;
+            outline: none;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        .food-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .food-options label {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 15px;
+            color: #ccc;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .food-options label:hover { background: rgba(255, 255, 255, 0.08); }
+
+        .food-options input[type="radio"] { display: none; }
+
+        .food-options label:has(input:checked) {
+            background: rgba(255, 74, 117, 0.2);
+            border-color: #ff4a75;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 74, 117, 0.3);
+        }
+
+        .submit-btn { width: 100%; margin-top: 10px; }
+
+        #finalMessage {
+            color: #eee;
+            font-size: 16px;
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ff4a75;
+        }
+
+        #finalMessage b { color: #ff85a1; text-shadow: 0 0 10px rgba(255,74,117,0.5); }
+
+        .ps { color: #888; font-size: 12px; font-style: italic; }
+
+        .confetti {
+            position: fixed; width: 8px; height: 8px; z-index: 999;
+            pointer-events: none; animation: drop linear forwards;
+        }
+        @keyframes drop {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sakura-bg" id="sakura"></div>
+
+    <div class="card">
+        <div class="user-badge">CODE: 040866666 // BY S!YØ</div>
+
+        <div class="step active" id="step1">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3BwcmNndnduN3RreXFubm80ZXF5bW93b3E2bW93M3p5M3R3YzhpdyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" class="gif">
+            <h2>Привет! Пойдёшь со мной на свидание? 🌸</h2>
+            <div class="btn-group">
+                <button class="btn yes-btn" onclick="nextStep(2)">ДА! 💖</button>
+                <button class="btn no-btn" id="noBtn">Нет 😿</button>
+            </div>
+        </div>
+
+        <div class="step" id="step2">
+            <h2>Отлично! 😍<br>Выбирай день:</h2>
+            <input type="date" id="dateInput">
+            <h3>Что будем кушать?</h3>
+            <div class="food-options">
+                <label><input type="radio" name="food" value="Пиццу 🍕"> 🍕 Пицца</label>
+                <label><input type="radio" name="food" value="Суши 🍣"> 🍣 Суши</label>
+                <label><input type="radio" name="food" value="Бургеры 🍔"> 🍔 Бургеры</label>
+                <label><input type="radio" name="food" value="Рамен 🍜"> 🍜 Рамен</label>
+            </div>
+            <button class="btn yes-btn submit-btn" onclick="submitDetails()">Подтвердить ✨</button>
+        </div>
+
+        <div class="step" id="step3">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW90b3gzd3R2YTFidmR4Mm1yamFvY29icXN6cTNpOHVpbmN6cHZ1OCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/RBsOmg7A9696VvI99F/giphy.gif" class="gif">
+            <h2>Увидимся! 🎉</h2>
+            <p id="finalMessage"></p>
+            <p class="ps">Будь готова, я заеду в назначенное время! 🚗💨</p>
+        </div>
+    </div>
+
+    <script>
+        // === НАСТРОЙКА СВЯЗИ ===
+        // 1. Нажми кнопку Copy на твоем скриншоте и вставь этот токен вместо букв ниже (кавычки оставь)
+        const TELEGRAM_BOT_TOKEN = '8234601096:AAHsGCGkiS_MW-bpUaiK_j4wm3n9NDan1cM'; 
+        // 2. Вставь сюда цифры ID, полученные из @userinfobot
+        const TELEGRAM_CHAT_ID = '885377169';
+
+        // Анимация сакуры
+        const sakura = document.getElementById('sakura');
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.className = 'petal';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.width = p.style.height = (8 + Math.random() * 10) + 'px';
+            p.style.animationDuration = (5 + Math.random() * 7) + 's';
+            p.style.animationDelay = Math.random() * 5 + 's';
+            sakura.appendChild(p);
+        }
+
+        // Кнопка Нет
+        const noBtn = document.getElementById('noBtn');
+        function moveNo() {
+            if(noBtn.style.position !== 'fixed') noBtn.style.position = 'fixed';
+            const m = 30;
+            const x = m + Math.random() * (window.innerWidth - noBtn.offsetWidth - m*2);
+            const y = m + Math.random() * (window.innerHeight - noBtn.offsetHeight - m*2);
+            noBtn.style.left = x + 'px'; noBtn.style.top = y + 'px';
+        }
+        noBtn.addEventListener('mouseenter', moveNo);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNo(); });
+
+        function nextStep(n) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step'+n).classList.add('active');
+            if(n > 1) noBtn.style.display = 'none';
+        }
+
+        // Отправка данных
+        function submitDetails() {
+            const d = document.getElementById('dateInput').value;
+            const f = document.querySelector('input[name="food"]:checked')?.value || 'вкусняшки';
+            if(!d) return alert('Выбери дату! 🗓️');
+            
+            const formatted = new Date(d + 'T12:00:00').toLocaleDateString('ru-RU', {day:'numeric', month:'long'});
+            
+            // Формируем текст уведомления в твой Telegram
+            const msg = `🎉 Твоё приглашение приняли!\n👤 Ник: S!YØ\n📅 Дата: ${formatted}\n🍕 Еда: ${f}`;
+
+            // Тайная отправка сообщения ботом
+            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msg })
+            });
+
+            document.getElementById('finalMessage').innerHTML = `Договорились на <b>${formatted}</b>!<br>С меня — <b>${f}</b>`;
+            nextStep(3);
+            confetti();
+        }
+
+        function confetti() {
+            const colors = ['#ff4a75', '#ff7eb3', '#fff'];
+            for(let i=0; i<60; i++) {
+                setTimeout(() => {
+                    const c = document.createElement('div');
+                    c.className = 'confetti';
+                    c.style.left = Math.random()*100+'vw';
+                    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+                    c.style.width = c.style.height = (5+Math.random()*8)+'px';
+                    c.style.animationDuration = (1.5+Math.random()*2)+'s';
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 3000);
+                }, i*25);
+            }
+        }
+    </script>
+</body>
+</html>
